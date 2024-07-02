@@ -41,10 +41,6 @@ A configuração para cada componente está armazenada em arquivos separados:
 * `licenseserver/Dockerfile`: Contém as instruções para construir a imagem do licenseserver.
 O arquivo `docker-compose.yml` orquestra os containers e define as variáveis de ambiente, portas e volumes necessários por componente.
 
-### Testes
-
-Este projeto inclui um conjunto básico de testes para verificar que os containers estão funcionando corretamente. Para executar os testes, execute: `docker-compose exec appserver pytest`
-
 ### Desenvolvimento Futuro
 
 Alguns desenvolvimentos futuros potenciais para este projeto incluem:
