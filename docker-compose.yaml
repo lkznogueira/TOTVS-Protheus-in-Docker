@@ -1,0 +1,57 @@
+version: "3.8"
+
+networks:
+  totvs:
+
+services:
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: totvs_mssql
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "MicrosoftSQL2019"
+      ACCEPT_EULA: "Y"
+    networks:
+      - totvs
+    volumes:
+      - ./data:/var/opt/mssql/data
+
+  licenseserver:
+    image: juliansantosinfo/totvs_licenseserver
+    container_name: totvs_licenseserver
+    restart: always
+    ports:
+      - "2234:2234"
+      - "5555:5555"
+      - "8020:8020"
+    networks:
+      - totvs
+
+  dbaccess:
+    image: juliansantosinfo/totvs_dbaccess
+    container_name: totvs_dbaccess
+    restart: always
+    ports:
+      - "7890:7890"
+      - "7891:7891"
+    networks:
+      - totvs
+    depends_on:
+      - mssql
+      - licenseserver
+
+  appserver:
+    image: juliansantosinfo/totvs_appserver
+    container_name: totvs_appserver
+    restart: always
+    ports:
+      - "1234:1234"
+      - "12345:12345"
+    networks:
+      - totvs
+    depends_on:
+      - licenseserver
+      - dbaccess

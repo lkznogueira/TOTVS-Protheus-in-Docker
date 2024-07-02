@@ -1,0 +1,9 @@
+FROM oraclelinux:8
+
+COPY . /
+
+RUN chmod +x /totvs/entrypoint.sh
+
+ENTRYPOINT [ "/totvs/entrypoint.sh" ]
+
+EXPOSE 1234
