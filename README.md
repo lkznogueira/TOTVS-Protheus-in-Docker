@@ -19,9 +19,18 @@ Este repositório contém três principais componentes:
 Para começar com este projeto, siga os passos abaixo:
 
 1. Clone este repositório: `git clone https://github.com/your-username/protheus-dockerization.git`
-2. Construa as imagens Docker: `docker-compose build`
-3. Inicie os containers: `docker-compose up -d`
-4. Acesse a aplicação Protheus: `http://localhost:12345` (Smartclient Web)
+2. Inicie os containers: `docker-compose up -d`
+3. Acesse a aplicação Protheus: `http://localhost:12345` (Smartclient Web)
+
+### Build local
+
+Caso queira contruir as imagens localmente
+
+1. acesse o diretorio appserver e execute o script `build.sh`
+2. acesse o diretorio dbaccess e execute o script `build.sh`
+3. acesse o diretorio licenseserver e execute o script `build.sh`
+4. Retorne ao diretório raiz do projeto, onde esta localizado o arquivo docker-compose.yaml
+5. Inicie os containers: `docker-compose up -d`
 
 ### Configuração
 
