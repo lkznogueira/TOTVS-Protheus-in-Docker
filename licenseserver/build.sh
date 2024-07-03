@@ -18,6 +18,9 @@ else
     # Extrai o arquivo tar
     tar -xzvf totvs.tar.gz
 
+    # Remove arquivo temporario
+    rm -rf totvs.tar.gz
+
     # Define a variável como true
     resources_exists=true
   fi
@@ -32,4 +35,23 @@ else
   echo "O diretório totvs não existe e o arquivo totvs.tar.gzaa não foi encontrado."
 fi
 
-rm -rf totvs.tar.gz
+# Verifica se o diretório existe
+if [ -d ./totvs ]; then
+
+  # Solicita confirmação do usuário
+  read -p "Deseja atualizar o arquivo totvs.tar.gz? (s/n) " resposta
+
+  # Verifica a resposta do usuário
+  if [ "$resposta" = "s" ] || [ "$resposta" = "S" ]; then
+    # Remove arquivos de partes existentes
+    rm -f totvs.tar.gz*
+
+    # Comprime o arquivo em partes de 99MB
+    tar -czvf - totvs | split -b 99m - totvs.tar.gz
+
+    echo "Arquivo totvs.tar.gz atualizado com sucesso!"
+  fi
+
+fi
+
+echo "Processo de build finalizado com sucesso!"

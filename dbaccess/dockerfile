@@ -1,12 +1,11 @@
-FROM oraclelinux:8
+FROM oraclelinux:8-slim
 
 COPY . /
 
 RUN mv /totvs/resources/etc/* /etc/ \
     && mv /totvs/resources/opt/* /opt/ \
     && chmod +x /totvs/entrypoint.sh \
-    && dnf update -y \
-    && dnf install nano unixODBC-devel
+    && microdnf install nano unixODBC-devel
 
 ENTRYPOINT [ "/totvs/entrypoint.sh" ]
 
