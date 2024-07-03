@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker run --rm -p 5555:5555 -p 2234:2234 -p 8020:8020 juliansantosinfo/totvs_licenseserver
+docker run -d --name totvs_licenseserver -p 5555:5555 -p 2234:2234 -p 8020:8020 --ulimit nofile=65536:65536 juliansantosinfo/totvs_licenseserver
