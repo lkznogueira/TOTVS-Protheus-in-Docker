@@ -126,6 +126,40 @@ docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345
 docker run -d --name totvs_apprest --network totvs -p 1235:1235 -p 12355:12355 -p 8080:8080 --ulimit nofile=65536:65536 juliansantosinfo/totvs_apprest:latest
 ```
 
+## Perguntas Frequentes
+
+**Pergunta:** Ao iniciar os containers `appserver` e `apprest`, a mensagem `[ERROR][SERVER] OPERATIONAL LIMITS ARE INSUFFICIENT, CHECK THE INSTALATION PROCEDURES AS WELL AS 'ULIMIT' CONFIGURATION` é exibida. Como corrigir?
+
+**Resposta:** Se você utiliza um sistema Debian/Ubuntu, este erro pode indicar que a configuração do número máximo de arquivos abertos simultaneamente na sua máquina **host** (não no container) está definida como o valor máximo de 64 bits (`9223372036854775807`).  Siga os passos abaixo para verificar e corrigir:
+
+1. **Acesse a conta root:**
+
+   ```bash
+   sudo su
+   ```
+
+2. **Verifique o limite atual de arquivos abertos:**
+
+   ```bash
+   cat /proc/sys/fs/file-max
+   ```
+
+3. **Se o valor for `9223372036854775807`, altere para o maior valor de 63 bits:**
+
+   ```bash
+   echo 4611686018427387903 > /proc/sys/fs/file-max
+   ```
+
+4. **Para tornar essa alteração persistente após reiniciar a máquina, adicione a seguinte linha ao arquivo `/etc/sysctl.conf`:**
+
+   ```bash
+   fs.file-max = 4611686018427387903
+   ```
+
+   Você pode editar o arquivo com o comando `sudo nano /etc/sysctl.conf` e adicionar a linha no final do arquivo.
+
+**Observação:** Esta solução ajusta o limite de arquivos abertos no nível do sistema operacional host. Certifique-se de entender as implicações de segurança antes de realizar esta alteração.
+
 ### Variáveis de Ambiente
 
 #### `licenseserver`
