@@ -18,26 +18,42 @@ services:
     networks:
       - totvs
     volumes:
-      - ./mssql/data:/var/opt/mssql/data
+      - ./volume/mssql/data:/var/opt/mssql/data
 
   licenseserver:
-    image: juliansantosinfo/totvs_licenseserver
+    image: juliansantosinfo/totvs_licenseserver:latest
     container_name: totvs_licenseserver
+    build:
+      context: ./licenseserver
+      dockerfile: dockerfile
     restart: always
     ports:
       - "2234:2234"
       - "5555:5555"
       - "8020:8020"
+    environment:
+      - LICENSE_TCP_PORT=2234
+      - LICENSE_CONSOLEFILE=/totvs/licenseserver/bin/appserver/licenseserver.log
+      - LICENSE_PORT=5555
+      - LICENSE_WEBAPP_PORT=8020
     networks:
       - totvs
 
   dbaccess:
-    image: juliansantosinfo/totvs_dbaccess
+    image: juliansantosinfo/totvs_dbaccess:latest
     container_name: totvs_dbaccess
+    build:
+      context: ./dbaccess
+      dockerfile: dockerfile
     restart: always
     ports:
       - "7890:7890"
       - "7891:7891"
+    environment:
+      - DATABASE_PASSWORD=MicrosoftSQL2019
+      - DBACCESS_LICENSE_SERVER=totvs_licenseserver
+      - DBACCESS_LICENSE_PORT=5555
+      - DBACCESS_CONSOLEFILE=/totvs/dbaccess/multi/dbconsole.log
     networks:
       - totvs
     depends_on:
@@ -45,14 +61,32 @@ services:
       - licenseserver
 
   appserver:
-    image: juliansantosinfo/totvs_appserver
+    image: juliansantosinfo/totvs_appserver:latest
     container_name: totvs_appserver
+    build:
+      context: ./appserver
+      dockerfile: dockerfile
     restart: always
     ports:
       - "1234:1234"
       - "12345:12345"
+    environment:
+      - APPSERVER_RPO_CUSTOM=/totvs/protheus/apo/custom.rpo
+      - APPSERVER_DBACCESS_DATABASE=MSSQL
+      - APPSERVER_DBACCESS_SERVER=totvs_dbaccess
+      - APPSERVER_DBACCESS_PORT=7890
+      - APPSERVER_DBACCESS_ALIAS=protheus
+      - APPSERVER_CONSOLEFILE=/totvs/protheus/bin/appserver/appserver.log
+      - APPSERVER_MULTIPROTOCOLPORTSECURE=0
+      - APPSERVER_MULTIPROTOCOLPORT=1
+      - APPSERVER_LICENSE_SERVER=totvs_licenseserver
+      - APPSERVER_LICENSE_PORT=5555
+      - APPSERVER_PORT=1234
+      - APPSERVER_WEB_PORT=12345
     networks:
       - totvs
+    volumes:
+      - ./volume/appserver/data:/totvs/protheus_data/data
     depends_on:
       - licenseserver
       - dbaccess

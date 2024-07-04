@@ -18,19 +18,64 @@ Este repositório contém três principais componentes:
 
 Para começar com este projeto, siga os passos abaixo:
 
-1. Clone este repositório: `git clone https://github.com/your-username/protheus-dockerization.git`
-2. Inicie os containers: `docker-compose up -d`
+1. Clone este repositório e acesse o diretório do projeto:
+
+    ```bash
+    git clone https://github.com/juliansantosinfo/TOTVS-Protheus-in-Docker.git
+    cd TOTVS-Protheus-in-Docker
+    ```
+
+2. Inicie os containers:
+
+    ```bash
+    docker compose up -d
+    ```
+
 3. Acesse a aplicação Protheus: `http://localhost:12345` (Smartclient Web)
 
 ### Build local
 
-Caso queira contruir as imagens localmente
+Caso queira contruir as imagens localmente.
 
-1. acesse o diretorio appserver e execute o script `build.sh`
-2. acesse o diretorio dbaccess e execute o script `build.sh`
-3. acesse o diretorio licenseserver e execute o script `build.sh`
-4. Retorne ao diretório raiz do projeto, onde esta localizado o arquivo docker-compose.yaml
-5. Inicie os containers: `docker-compose up -d`
+1. Clone este repositório e acesse o diretório do projeto:
+
+    ```bash
+    git clone https://github.com/juliansantosinfo/TOTVS-Protheus-in-Docker.git
+    cd TOTVS-Protheus-in-Docker
+    ```
+
+2. acesse o diretorio **appserver** e execute o script `build.sh`
+
+    ```bash
+    cd appserver
+    ./build.sh
+    ```
+
+3. acesse o diretorio **dbaccess** e execute o script `build.sh`
+
+    ```bash
+    cd appserver
+    ./build.sh
+    ```
+
+4. acesse o diretorio **licenseserver** e execute o script `build.sh`
+
+    ```bash
+    cd appserver
+    ./build.sh
+    ```
+
+5. Retorne ao diretório raiz do projeto, onde esta localizado o arquivo docker-compose.yaml
+
+    ```bash
+    cd ..
+    ```
+
+6. Inicie os containers: `docker-compose up -d`
+
+    ```bash
+    docker-compose up -d
+    ```
 
 ### Configuração
 
@@ -41,13 +86,74 @@ A configuração para cada componente está armazenada em arquivos separados:
 * `licenseserver/Dockerfile`: Contém as instruções para construir a imagem do licenseserver.
 O arquivo `docker-compose.yml` orquestra os containers e define as variáveis de ambiente, portas e volumes necessários por componente.
 
-### Desenvolvimento Futuro
+### Execução dos containers
 
-Alguns desenvolvimentos futuros potenciais para este projeto incluem:
+**Criar nova network**
 
-* Implementar testes automatizados utilizando um framework como Pytest ou Unittest.
-* Configurar balanceamento de carga e escalabilidade para o componente appserver.
-* Explorar a utilização do Kubernetes para gerenciar os containers em produção.
+```bash
+docker network create totvs
+```
+
+**mssql:**
+
+```bash
+docker run -d --name totvs_mssql --network totvs -p 1433:1433 -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MicrosoftSQL2019" mcr.microsoft.com/mssql/server:2019-latest
+```
+
+**licenseserver:**
+
+```bash
+docker run -d --name totvs_licenseserver --network totvs -p 5555:5555 -p 2234:2234 -p 8020:8020 --ulimit nofile=65536:65536 juliansantosinfo/totvs_licenseserver
+```
+
+**dbaccess:**
+
+```bash
+docker run -d --name totvs_dbaccess --network totvs -p 7890:7890 -p 7891:7891 -e "DATABASE_PASSWORD=MicrosoftSQL2019" juliansantosinfo/totvs_dbaccess
+```
+
+**appserver:**
+
+```bash
+docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345 --ulimit nofile=65536:65536 juliansantosinfo/totvs_appserver
+```
+
+### Variáveis de Ambiente
+
+#### `licenseserver`
+
+| Variável de Ambiente | Conteúdo Padrão | Descrição |
+|---|---|---|
+| `LICENSE_TCP_PORT` | `2234` | Define a porta TCP para comunicação com o servidor de licenças. |
+| `LICENSE_CONSOLEFILE` | `/totvs/licenseserver/bin/appserver/licenseserver.log` | Define o caminho para o arquivo de log do servidor de licenças. |
+| `LICENSE_PORT` | `5555` | Define a porta principal do servidor de licenças. |
+| `LICENSE_WEBAPP_PORT` | `8020` | Define a porta para a interface de monitoramento web do servidor de licenças. |
+
+#### `dbaccess`
+
+| Variável de Ambiente | Conteúdo Padrão | Descrição |
+|---|---|---|
+| `DATABASE_PASSWORD` | `MicrosoftSQL2019` | Senha para acesso ao banco de dados (Mesma definida no container de banco de dados do MSSQL). |
+| `DBACCESS_LICENSE_SERVER` | `totvs_licenseserver` | Define o nome do host do servidor de licenças. |
+| `DBACCESS_LICENSE_PORT` | `5555` | Define a porta do servidor de licenças. |
+| `DBACCESS_CONSOLEFILE` | `/totvs/dbaccess/multi/dbconsole.log` | Define o caminho para o arquivo de log do dbaccess. |
+
+#### `appserver`
+
+| Variável de Ambiente | Conteúdo Padrão | Descrição |
+|---|---|---|
+| `APPSERVER_RPO_CUSTOM` | `/totvs/protheus/apo/custom.rpo` | Define o caminho para o arquivo de RPO customizado do AppServer. |
+| `APPSERVER_DBACCESS_DATABASE` | `MSSQL` | Define o tipo de banco de dados utilizado (ex: MSSQL, Oracle). |
+| `APPSERVER_DBACCESS_SERVER` | `totvs_dbaccess` | Define o nome do host do serviço DBAccess. |
+| `APPSERVER_DBACCESS_PORT` | `7890` | Define a porta do serviço DBAccess. |
+| `APPSERVER_DBACCESS_ALIAS` | `protheus` | Define o alias para a conexão com o banco de dados. |
+| `APPSERVER_CONSOLEFILE` | `/totvs/protheus/bin/appserver/appserver.log` | Define o caminho para o arquivo de log do AppServer. |
+| `APPSERVER_MULTIPROTOCOLPORTSECURE` | `0` | Define a porta segura para o protocolo múltiplo (0 desativa a porta segura). |
+| `APPSERVER_MULTIPROTOCOLPORT` | `1` | Define a porta para o protocolo múltiplo. |
+| `APPSERVER_LICENSE_SERVER` | `totvs_licenseserver` | Define o nome do host do servidor de licenças. |
+| `APPSERVER_LICENSE_PORT` | `5555` | Define a porta do servidor de licenças. |
+| `APPSERVER_PORT` | `1234` | Define a porta principal do AppServer. |
+| `APPSERVER_WEB_PORT` | `12345` | Define a porta para a interface web do AppServer. |
 
 ### Licença
 

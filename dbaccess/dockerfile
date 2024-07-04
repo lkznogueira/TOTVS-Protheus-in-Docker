@@ -1,9 +1,14 @@
 FROM oraclelinux:8-slim
 
-COPY . /
+ENV DATABASE_PASSWORD=MicrosoftSQL2019
+ENV DBACCESS_LICENSE_SERVER=totvs_licenseserver
+ENV DBACCESS_LICENSE_PORT=5555
+ENV DBACCESS_CONSOLEFILE=/totvs/dbaccess/multi/dbconsole.log
 
-RUN mv /totvs/resources/etc/* /etc/ \
-    && mv /totvs/resources/opt/* /opt/ \
+COPY ./totvs /totvs
+
+RUN cp /totvs/resources/etc/* /etc/ \
+    && cp -r /totvs/resources/opt/* /opt/ \
     && chmod +x /totvs/entrypoint.sh \
     && microdnf install nano unixODBC-devel
 
