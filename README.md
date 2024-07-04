@@ -81,9 +81,11 @@ Caso queira contruir as imagens localmente.
 
 A configuração para cada componente está armazenada em arquivos separados:
 
+* `apprest/Dockerfile`: Contém as instruções para construir a imagem do apprest.
 * `appserver/Dockerfile`: Contém as instruções para construir a imagem do appserver.
 * `dbaccess/Dockerfile`: Contém as instruções para construir a imagem do dbaccess.
 * `licenseserver/Dockerfile`: Contém as instruções para construir a imagem do licenseserver.
+
 O arquivo `docker-compose.yml` orquestra os containers e define as variáveis de ambiente, portas e volumes necessários por componente.
 
 ### Execução dos containers
@@ -103,19 +105,25 @@ docker run -d --name totvs_mssql --network totvs -p 1433:1433 -e "ACCEPT_EULA=Y"
 **licenseserver:**
 
 ```bash
-docker run -d --name totvs_licenseserver --network totvs -p 5555:5555 -p 2234:2234 -p 8020:8020 --ulimit nofile=65536:65536 juliansantosinfo/totvs_licenseserver
+docker run -d --name totvs_licenseserver --network totvs -p 5555:5555 -p 2234:2234 -p 8020:8020 --ulimit nofile=65536:65536 juliansantosinfo/totvs_licenseserver:latest
 ```
 
 **dbaccess:**
 
 ```bash
-docker run -d --name totvs_dbaccess --network totvs -p 7890:7890 -p 7891:7891 -e "DATABASE_PASSWORD=MicrosoftSQL2019" juliansantosinfo/totvs_dbaccess
+docker run -d --name totvs_dbaccess --network totvs -p 7890:7890 -p 7891:7891 -e "DATABASE_PASSWORD=MicrosoftSQL2019" juliansantosinfo/totvs_dbaccess:latest
 ```
 
 **appserver:**
 
 ```bash
-docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345 --ulimit nofile=65536:65536 juliansantosinfo/totvs_appserver
+docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345 --ulimit nofile=65536:65536 juliansantosinfo/totvs_appserver:latest
+```
+
+**apprest:**
+
+```bash
+docker run -d --name totvs_apprest --network totvs -p 1235:1235 -p 12355:12355 -p 8080:8080 --ulimit nofile=65536:65536 juliansantosinfo/totvs_apprest:latest
 ```
 
 ### Variáveis de Ambiente
@@ -154,6 +162,24 @@ docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345
 | `APPSERVER_LICENSE_PORT` | `5555` | Define a porta do servidor de licenças. |
 | `APPSERVER_PORT` | `1234` | Define a porta principal do AppServer. |
 | `APPSERVER_WEB_PORT` | `12345` | Define a porta para a interface web do AppServer. |
+
+#### apprest
+
+| Variável de Ambiente | Conteúdo Padrão | Descrição |
+|---|---|---|
+| `APPSERVER_RPO_CUSTOM` | `/totvs/protheus/apo/custom.rpo` | Define o caminho para o arquivo de RPO customizado do AppServer. |
+| `APPSERVER_DBACCESS_DATABASE` | `MSSQL` | Define o tipo de banco de dados utilizado (ex: MSSQL, Oracle). |
+| `APPSERVER_DBACCESS_SERVER` | `totvs_dbaccess` | Define o nome do host do serviço DBAccess. |
+| `APPSERVER_DBACCESS_PORT` | `7890` | Define a porta do serviço DBAccess. |
+| `APPSERVER_DBACCESS_ALIAS` | `protheus` | Define o alias para a conexão com o banco de dados. |
+| `APPSERVER_CONSOLEFILE` | `/totvs/protheus/bin/appserver/appserver.log` | Define o caminho para o arquivo de log do AppServer. |
+| `APPSERVER_MULTIPROTOCOLPORTSECURE` | `0` | Define a porta segura para o protocolo múltiplo (0 desativa a porta segura). |
+| `APPSERVER_MULTIPROTOCOLPORT` | `1` | Define a porta para o protocolo múltiplo. |
+| `APPSERVER_LICENSE_SERVER` | `totvs_licenseserver` | Define o nome do host do servidor de licenças. |
+| `APPSERVER_LICENSE_PORT` | `5555` | Define a porta do servidor de licenças. |
+| `APPSERVER_PORT` | `1235` | Define a porta principal do AppServer. |
+| `APPSERVER_WEB_PORT` | `12355` | Define a porta para a interface web do AppServer. |
+| `APPSERVER_REST_PORT` | `8080` | Define a porta para serviço REST do AppServer. |
 
 ### Licença
 
