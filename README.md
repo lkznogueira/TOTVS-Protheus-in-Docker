@@ -8,7 +8,7 @@ O sistema de ERP Protheus é uma solução de software complexa que requer confi
 
 ### Componentes
 
-Este repositório contém três principais componentes:
+Este repositório contém quatro principais componentes:
 
 1. **appserver**: O servidor de aplicação principal do sistema ERP Protheus.
 2. **apprest**: O servidor de aplicação REST do sistema ERP Protheus.
