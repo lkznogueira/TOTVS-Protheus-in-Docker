@@ -11,8 +11,9 @@ O sistema de ERP Protheus é uma solução de software complexa que requer confi
 Este repositório contém três principais componentes:
 
 1. **appserver**: O servidor de aplicação principal do sistema ERP Protheus.
-2. **dbaccess**: Um serviço que fornece acesso ao banco de dados.
-3. **licenseserver**: Um serviço que gerencia licenças para o sistema ERP Protheus.
+2. **apprest**: O servidor de aplicação REST do sistema ERP Protheus.
+3. **dbaccess**: Um serviço que fornece acesso ao banco de dados.
+4. **licenseserver**: Um serviço que gerencia licenças para o sistema ERP Protheus.
 
 ### Início Rápido
 
