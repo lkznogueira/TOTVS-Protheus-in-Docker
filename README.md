@@ -28,7 +28,7 @@ Para começar com este projeto, siga os passos abaixo:
 2. Inicie os containers:
 
     ```bash
-    docker compose up -d
+    docker compose -p totvs up
     ```
 
 3. Acesse a aplicação Protheus: `http://localhost:12345` (Smartclient Web)
@@ -44,37 +44,44 @@ Caso queira contruir as imagens localmente.
     cd TOTVS-Protheus-in-Docker
     ```
 
-2. acesse o diretorio **appserver** e execute o script `build.sh`
+2. acesse o diretorio **apprest** e execute o script `build.sh`
+
+    ```bash
+    cd apprest
+    ./build.sh
+    ```
+
+3. acesse o diretorio **appserver** e execute o script `build.sh`
 
     ```bash
     cd appserver
     ./build.sh
     ```
 
-3. acesse o diretorio **dbaccess** e execute o script `build.sh`
+4. acesse o diretorio **dbaccess** e execute o script `build.sh`
 
     ```bash
     cd appserver
     ./build.sh
     ```
 
-4. acesse o diretorio **licenseserver** e execute o script `build.sh`
+5. acesse o diretorio **licenseserver** e execute o script `build.sh`
 
     ```bash
     cd appserver
     ./build.sh
     ```
 
-5. Retorne ao diretório raiz do projeto, onde esta localizado o arquivo docker-compose.yaml
+6. Retorne ao diretório raiz do projeto, onde esta localizado o arquivo docker-compose.yaml
 
     ```bash
     cd ..
     ```
 
-6. Inicie os containers: `docker-compose up -d`
+7. Inicie os containers:
 
     ```bash
-    docker-compose up -d
+    docker compose -p totvs up
     ```
 
 ### Configuração
@@ -89,6 +96,8 @@ A configuração para cada componente está armazenada em arquivos separados:
 O arquivo `docker-compose.yml` orquestra os containers e define as variáveis de ambiente, portas e volumes necessários por componente.
 
 ### Execução dos containers
+
+Para executar os containers manualmente via linha de comando, siga os passos a baixo.
 
 **Criar nova network**
 
