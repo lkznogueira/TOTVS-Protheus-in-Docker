@@ -1,5 +1,5 @@
 networks:
-  totvs:
+  network:
 
 services:
 
@@ -14,7 +14,7 @@ services:
       SA_PASSWORD: "MicrosoftSQL2019"
       ACCEPT_EULA: "Y"
     networks:
-      - totvs
+      - network
     volumes:
       - ./volume/mssql/data:/var/opt/mssql/data
 
@@ -35,7 +35,7 @@ services:
       - LICENSE_PORT=5555
       - LICENSE_WEBAPP_PORT=8020
     networks:
-      - totvs
+      - network
 
   dbaccess:
     image: juliansantosinfo/totvs_dbaccess:latest
@@ -53,7 +53,7 @@ services:
       - DBACCESS_LICENSE_PORT=5555
       - DBACCESS_CONSOLEFILE=/totvs/dbaccess/multi/dbconsole.log
     networks:
-      - totvs
+      - network
     depends_on:
       - mssql
       - licenseserver
@@ -82,7 +82,7 @@ services:
       - APPSERVER_PORT=1234
       - APPSERVER_WEB_PORT=12345
     networks:
-      - totvs
+      - network
     volumes:
       - ./volume/appserver/data:/totvs/protheus_data/data
       - ./volume/appserver/apo:/totvs/protheus/apo/custom
@@ -116,7 +116,7 @@ services:
       - APPSERVER_WEB_PORT=12355
       - APPSERVER_REST_PORT=8080
     networks:
-      - totvs
+      - network
     volumes:
       - ./volume/apprest/data:/totvs/protheus_data/data
       - ./volume/apprest/apo:/totvs/protheus/apo/custom
