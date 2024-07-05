@@ -96,6 +96,8 @@ services:
     build:
       context: ./apprest
       dockerfile: dockerfile
+    profiles:
+      - manual
     restart: always
     ports:
       - "1235:1235"

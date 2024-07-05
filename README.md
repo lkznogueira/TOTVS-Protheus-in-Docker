@@ -31,9 +31,14 @@ Para começar com este projeto, siga os passos abaixo:
     docker compose -p totvs up
     ```
 
-3. Acesse a aplicação Protheus: `http://localhost:12345` (Smartclient Web)
+    Após a inicialização, acesse a aplicação em seu navegador através do endereço: <http://localhost:12345> (Smartclient Web).
 
-### Build local
+    1. **Acesse a aplicação no endereço indicado e realize a criação da empresa de teste.**
+    2. **Após concluir a criação da empresa, inicie o serviço `apprest` manualmente.**
+
+    **Informações adicionais sobre como iniciar o serviço `apprest` manualmente podem ser encontradas na documentação.**
+
+### Build
 
 Caso queira contruir as imagens localmente.
 
@@ -95,45 +100,98 @@ A configuração para cada componente está armazenada em arquivos separados:
 
 O arquivo `docker-compose.yml` orquestra os containers e define as variáveis de ambiente, portas e volumes necessários por componente.
 
-### Execução dos containers
+## Execução dos Containers via Docker
 
-Para executar os containers manualmente via linha de comando, siga os passos a baixo.
+Este guia detalha como executar os containers manualmente utilizando a linha de comando.
 
-**Criar nova network**
+### Pré-requisitos
+
+* Docker instalado e em execução.
+* Conhecimento básico de comandos Docker.
+
+### Passo 1: Criar a Rede Docker
+
+Primeiramente, crie uma rede Docker para permitir a comunicação entre os containers:
 
 ```bash
 docker network create totvs
 ```
 
-**mssql:**
+### Passo 2: Iniciar os Containers
+
+Agora, vamos iniciar cada container individualmente, conectando-os à rede "totvs":
+
+**2.1. Microsoft SQL Server (mssql):**
 
 ```bash
-docker run -d --name totvs_mssql --network totvs -p 1433:1433 -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=MicrosoftSQL2019" mcr.microsoft.com/mssql/server:2019-latest
+docker run -d \
+  --name totvs_mssql \
+  --network totvs \
+  -p 1433:1433 \
+  -e "ACCEPT_EULA=Y" \
+  -e "SA_PASSWORD=MicrosoftSQL2019" \
+  mcr.microsoft.com/mssql/server:2019-latest
 ```
 
-**licenseserver:**
+**2.2. TOTVS License Server (licenseserver):**
 
 ```bash
-docker run -d --name totvs_licenseserver --network totvs -p 5555:5555 -p 2234:2234 -p 8020:8020 --ulimit nofile=65536:65536 juliansantosinfo/totvs_licenseserver:latest
+docker run -d \
+  --name totvs_licenseserver \
+  --network totvs \
+  -p 5555:5555 \
+  -p 2234:2234 \
+  -p 8020:8020 \
+  --ulimit nofile=65536:65536 \
+  juliansantosinfo/totvs_licenseserver:latest
 ```
 
-**dbaccess:**
+**2.3. TOTVS DBAccess (dbaccess):**
 
 ```bash
-docker run -d --name totvs_dbaccess --network totvs -p 7890:7890 -p 7891:7891 -e "DATABASE_PASSWORD=MicrosoftSQL2019" juliansantosinfo/totvs_dbaccess:latest
+docker run -d \
+  --name totvs_dbaccess \
+  --network totvs \
+  -p 7890:7890 \
+  -p 7891:7891 \
+  -e "DATABASE_PASSWORD=MicrosoftSQL2019" \
+  juliansantosinfo/totvs_dbaccess:latest
 ```
 
-**appserver:**
+**2.4. TOTVS Application Server (appserver):**
 
 ```bash
-docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345 --ulimit nofile=65536:65536 juliansantosinfo/totvs_appserver:latest
+docker run -d \
+  --name totvs_appserver \
+  --network totvs \
+  -p 1234:1234 \
+  -p 12345:12345 \
+  --ulimit nofile=65536:65536 \
+  juliansantosinfo/totvs_appserver:latest
 ```
 
-**apprest:**
+**2.5. TOTVS Application REST (apprest):**
 
 ```bash
-docker run -d --name totvs_apprest --network totvs -p 1235:1235 -p 12355:12355 -p 8080:8080 --ulimit nofile=65536:65536 juliansantosinfo/totvs_apprest:latest
+docker run -d \
+  --name totvs_apprest \
+  --network totvs \
+  -p 1235:1235 \
+  -p 12355:12355 \
+  -p 8080:8080 \
+  --ulimit nofile=65536:65536 \
+  juliansantosinfo/totvs_apprest:latest
 ```
+
+### Observações
+
+* As portas expostas em cada container podem ser modificadas conforme necessário.
+* As senhas definidas nos comandos acima são exemplos e devem ser alteradas para garantir a segurança do ambiente.
+* As variáveis de ambiente estão disponiveis em uma sessão a parte nesta documentação.
+
+### Próximos Passos
+
+Após iniciar todos os containers, você pode acessar as aplicações TOTVS através das portas configuradas. Consulte a documentação oficial da TOTVS para obter mais informações sobre a utilização dos produtos.
 
 ## Perguntas Frequentes
 
