@@ -14,9 +14,10 @@ Este repositório contém um dos quatro principais componentes:
 
 Outros contêineres necessários
 
-* **dbaccess**: Um serviço que fornece acesso ao banco de dados.
+* **mssql**: Serviço de banco de dados para persistencia dos dados do sistema.
 * **licenseserver**: Um serviço que gerencia licenças para o sistema ERP Protheus.
-* **apprest**: O servidor de aplicação REST do sistema ERP Protheus.
+* **dbaccess**: Um serviço que fornece acesso ao banco de dados.
+Protheus.
 
 ### Início Rápido
 
@@ -39,7 +40,7 @@ Para começar com este projeto, siga os passos abaixo.
 3. Executar o container.
 
     ```bash
-    docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345 --ulimit nofile=65536:65536 juliansantosinfo/totvs_appserver:latest
+    docker run -d --name totvs_appserver --network totvs -p 1234:1234 -p 12345:12345 -p8088:8088 --ulimit nofile=65536:65536 juliansantosinfo/totvs_appserver:latest
     ```
 
 ### Build local
@@ -80,3 +81,4 @@ Caso queira construir as imagens localmente
 | `APPSERVER_LICENSE_PORT` | `5555` | Define a porta do servidor de licenças. |
 | `APPSERVER_PORT` | `1234` | Define a porta principal do AppServer. |
 | `APPSERVER_WEB_PORT` | `12345` | Define a porta para a interface web do AppServer. |
+| `APPSERVER_WEB_MANAGER` | `8088` | Define a porta para a interface web de gerenciamento do AppServer. |

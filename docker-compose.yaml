@@ -68,6 +68,7 @@ services:
     ports:
       - "1234:1234"
       - "12345:12345"
+      - "8088:8088"
     environment:
       - APPSERVER_RPO_CUSTOM=/totvs/protheus/apo/custom/custom.rpo
       - APPSERVER_DBACCESS_DATABASE=MSSQL
@@ -81,6 +82,7 @@ services:
       - APPSERVER_LICENSE_PORT=5555
       - APPSERVER_PORT=1234
       - APPSERVER_WEB_PORT=12345
+      - APPSERVER_WEB_MANAGER=8088
     networks:
       - network
     volumes:
