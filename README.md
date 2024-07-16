@@ -287,6 +287,7 @@ Após iniciar todos os containers, você pode acessar as aplicações TOTVS atra
 | `APPSERVER_LICENSE_PORT` | `5555` | Define a porta do servidor de licenças. |
 | `APPSERVER_PORT` | `1234` | Define a porta principal do AppServer. |
 | `APPSERVER_WEB_PORT` | `12345` | Define a porta para a interface web do AppServer. |
+| `APPSERVER_WEB_MANAGER` | `8088` | Define a porta para a interface web de gerenciamento do AppServer. |
 
 #### apprest
 
@@ -305,6 +306,7 @@ Após iniciar todos os containers, você pode acessar as aplicações TOTVS atra
 | `APPSERVER_PORT` | `1235` | Define a porta principal do AppServer. |
 | `APPSERVER_WEB_PORT` | `12355` | Define a porta para a interface web do AppServer. |
 | `APPSERVER_REST_PORT` | `8080` | Define a porta para serviço REST do AppServer. |
+| `APPSERVER_WEB_MANAGER` | `8088` | Define a porta para a interface web de gerenciamento do AppServer. |
 
 ### Licença
 
