@@ -1,5 +1,9 @@
 FROM oraclelinux:8-slim
 
+LABEL version="23.1.1.4"
+LABEL description="TOTVS DBAccess" 
+LABEL maintainer="Julian de Almeida Santos <julian.santos.info@gmail.com>"
+
 ENV DATABASE_PASSWORD=MicrosoftSQL2019
 ENV DBACCESS_LICENSE_SERVER=totvs_licenseserver
 ENV DBACCESS_LICENSE_PORT=5555
