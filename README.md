@@ -1,5 +1,8 @@
 # Dockerização do ERP TOTVS Protheus
 
+- [RELEASE 12.1.2310](https://github.com/juliansantosinfo/TOTVS-Protheus-in-Docker/tree/release12.1.2310)
+- [RELEASE 12.1.2410](https://github.com/juliansantosinfo/TOTVS-Protheus-in-Docker/tree/release12.1.2410)
+
 ## Overview
 
 Este repositório contém a implementação da aplicação do ERP TOTVS Protheus utilizando containers Docker.
