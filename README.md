@@ -69,7 +69,7 @@ Caso queira contruir as imagens localmente.
 1. Clone este repositório e acesse o diretório do projeto:
 
     ```bash
-    git clone https://github.com/juliansantosinfo/TOTVS-Protheus-in-Docker.git
+    git clone https://github.com/lkznogueira/TOTVS-Protheus-in-Docker.git
     cd TOTVS-Protheus-in-Docker
     ```
 
@@ -90,14 +90,14 @@ Caso queira contruir as imagens localmente.
 4. acesse o diretorio **dbaccess** e execute o script `build.sh`
 
     ```bash
-    cd appserver
+    cd dbaccess
     ./build.sh
     ```
 
 5. acesse o diretorio **licenseserver** e execute o script `build.sh`
 
     ```bash
-    cd appserver
+    cd licenseserver
     ./build.sh
     ```
 
@@ -311,7 +311,3 @@ Após iniciar todos os containers, você pode acessar as aplicações TOTVS atra
 ### Licença
 
 Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para detalhes.
-
-### Contribuindo
-
-Se você gostaria de contribuir para este projeto, por favor, forque-o e envie uma solicitação de pull com suas alterações.
